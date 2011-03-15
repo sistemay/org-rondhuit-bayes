@@ -9,6 +9,8 @@ package org.rondhuit.bayes;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class TrainingSet implements Serializable {
 
@@ -27,9 +29,9 @@ public class TrainingSet implements Serializable {
 	 * 
 	 * How would you go about merging two training sets? What problems do you foresee?
 	 */	
-	private HashMap<Integer,Instance> instanceSet;
-	private HashSet<Concept> conceptSet;
-	private HashSet<String> attributeNameSet;
+	private Map<Integer,Instance> instanceSet;
+	private Set<Concept> conceptSet;
+	private Set<String> attributeNameSet;
 	
 	public TrainingSet() {
 	  instanceSet = new HashMap<Integer,Instance>();
@@ -82,7 +84,7 @@ public class TrainingSet implements Serializable {
 	/**
 	 * @return the instanceSet
 	 */
-	public HashMap<Integer,Instance> getInstances() {
+	public Map<Integer,Instance> getInstances() {
 		return instanceSet;
 	}
 
@@ -112,11 +114,11 @@ public class TrainingSet implements Serializable {
 	/**
 	 * @return the conceptSet
 	 */
-	public HashSet<Concept> getConceptSet() {
+	public Set<Concept> getConceptSet() {
 		return conceptSet;
 	}
 	
-	public HashSet<String> getAttributeNameSet() {
+	public Set<String> getAttributeNameSet() {
 	  return attributeNameSet;
 	}
 
