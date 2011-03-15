@@ -9,6 +9,7 @@ package org.rondhuit.bayes;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class captures a user click.
@@ -16,30 +17,28 @@ import java.util.ArrayList;
  * @author babis
  *
  */
-public class UserClick  extends BaseInstance {
+public class UserClick implements Instance {
 
-	UserQuery userQuery;
-	String url;
+  Concept concept;          // url
+  Attribute[] attributes;   // uid and each query term
 	
-	public UserClick() {
-		super();
+	public UserClick(String uid, String query, String url){
+	  this(new UserQuery(uid, query), url);
 	}
 	
-	public UserClick(UserQuery uQ, String url) {
-		super();
-		userQuery = uQ;
-		this.setConcept(new BaseConcept(url));
-    attributes = new StringAttribute[userQuery.getQueryTerms().length+1];
-    attributes[0] = new StringAttribute("UserName",userQuery.getUid());
-    int j=1;
-    for (String s : uQ.getQueryTerms()) {
+	public UserClick(UserQuery uq, String url) {
+    concept = new BaseConcept(url);
+    attributes = new StringAttribute[uq.getQueryTerms().length+1];
+    attributes[0] = new StringAttribute("UserName",uq.getUid());
+    int j = 0;
+    for (String s : uq.getQueryTerms()) {
       attributes[j] = new StringAttribute("QueryTerm_"+j,s);
       j++;
     }
 	}
 	
   public static UserClick[] load(BufferedReader bR) throws IOException {
-    ArrayList<UserClick> userClicks = new ArrayList<UserClick>();
+    List<UserClick> userClicks = new ArrayList<UserClick>();
     String line;
     boolean hasMoreLines = true;
     while (hasMoreLines) {
@@ -48,22 +47,43 @@ public class UserClick  extends BaseInstance {
         hasMoreLines = false;
       } else {
         String[] data = line.split(",");
-        UserQuery uQ = new UserQuery(data[0],data[1]);
-        UserClick userClick = new UserClick(uQ,data[2].substring(1, data[2].length()-1));
-        userClick.print();
+        assert(data.length == 3);
+        UserClick userClick = new UserClick(data[0], data[1], data[2]);
+        //userClick.print();
         userClicks.add(userClick);
       }
     }
     return userClicks.toArray(new UserClick[userClicks.size()]);
 	}
+
+  /**
+   * Pretty print the information for this Instance
+   */
+  public void print() {
+    if (attributes != null) {
+      for (Attribute a : attributes) {
+        if ( a == null || a.getName() == null) {
+          System.out.print(" -  <NULL ATTRIBUTE> ");
+        } else {
+          if (a.getValue() == null) {
+            System.out.print(" -  <NULL ATTRIBUTE VALUE> ");
+          } else {
+            System.out.print(" -  "+a.getName()+" = "+a.getValue());
+          }
+        }
+      }
+    }
+    System.out.println(" -->  "+getConcept().getName());
+  }
   
   @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((url == null) ? 0 : url.hashCode());
-    result = prime * result
-            + ((userQuery == null) ? 0 : userQuery.hashCode());
+    result = prime * result + ((concept == null) ? 0 : concept.hashCode());
+    for(Attribute a : attributes){
+      result = prime * result + a.hashCode();
+    }
     return result;
   }
 
@@ -73,35 +93,29 @@ public class UserClick  extends BaseInstance {
       return true;
     if (obj == null)
       return false;
-    if (getClass() != obj.getClass())
+    if (!(obj instanceof UserClick))
       return false;
     final UserClick other = (UserClick) obj;
-    if (url == null) {
-      if (other.url != null)
+    if (concept == null) {
+      if (other.concept != null)
         return false;
-    } else if (!url.equals(other.url))
+    } else if (!concept.equals(other.concept))
       return false;
-    if (userQuery == null) {
-      if (other.userQuery != null)
+    if(attributes.length != other.attributes.length)
+      return false;
+    // sequence must be same if they are equal
+    for(int i = 0; i < attributes.length; i++){
+      if(attributes[i] != other.attributes[i])
         return false;
-    } else if (!userQuery.equals(other.userQuery))
-      return false;
+    }
     return true;
   }
 
-  /**
-   * The first attribute of a user click Instance is the URL
-   * 
-   * @return the url
-   */
-  public String getUrl() {
-    return (String) attributes[0].getValue();
+  public Attribute[] getAtrributes() {
+    return attributes;
   }
 
-  /**
-   * @return the userQuery
-   */
-  public UserQuery getUserQuery() {
-    return userQuery;
-  }	
+  public Concept getConcept() {
+    return concept;
+  }
 }

@@ -7,6 +7,7 @@
 package org.rondhuit.bayes;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author babis
@@ -15,15 +16,15 @@ import java.util.ArrayList;
 public class BaseConcept implements Concept {
 
 	private String name;
-	private BaseConcept parent;
+	private Concept parent;
 
-	private ArrayList<Instance> instances = new ArrayList<Instance>();
+	private List<Instance> instances = new ArrayList<Instance>();
 	
 	public BaseConcept(String name) {
-		this.name = name;
+	  this(name, null);
 	}
 	
-	public BaseConcept(String name, BaseConcept parent) {
+	public BaseConcept(String name, Concept parent) {
 		this.name = name;
 		this.parent = parent;
 	}
@@ -44,13 +45,13 @@ public class BaseConcept implements Concept {
 		return parent;
 	}
 	
-	public void setParent(BaseConcept parent) {
+	public void setParent(Concept parent) {
 		this.parent = parent;
 	}
 	
 	@Override
 	public String toString() {
-	    return name;
+	  return name;
 	}
 	
 	@Override
@@ -64,13 +65,13 @@ public class BaseConcept implements Concept {
 
 	@Override
 	public boolean equals(Object obj) {
+    if ( !(obj instanceof BaseConcept) ) {
+      return false;
+    }
+    if (this == obj) {
+      return true;
+    }
 	  final BaseConcept other = (BaseConcept) obj;
-	  if (this == obj) {
-	    return true;
-	  }
-	  if ( !(obj instanceof BaseConcept) ) {
-	    return false;
-	  }
 	  if (name == null) {
 	    if (other.name != null) {
 	      return false;
@@ -84,6 +85,13 @@ public class BaseConcept implements Concept {
 	    }
 	  } else if (!parent.equals(other.parent)) {
 	    return false;
+	  }
+	  if(instances.size() != other.instances.size())
+	    return false;
+	  // sequence must be same if they are equal
+	  for(int i = 0; i < instances.size(); i++){
+	    if(instances.get(i) != other.instances.get(i))
+	      return false;
 	  }
 	  return true;
 	}	
