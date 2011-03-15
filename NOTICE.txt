@@ -6,7 +6,7 @@ written by HARALAMBOS MARMANIS and DMITRY BABENKO
 May, 2009 ISBN: 1933988665
 http://www.manning.com/marmanis/
 
-These programs are rewritten from the original ones in terms of package names
+These programs are rewritten from the original ones in terms of package names, refactoring
 and removing dependency of other project (e.g. Apache Lucene), no more than that.
 They are distributed under LGPL.
 

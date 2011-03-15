@@ -8,6 +8,7 @@ package org.rondhuit.bayes;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,12 +46,12 @@ public class NaiveBayes implements Classifier {
 	 * This structure contains the fundamental calculation elements of 
 	 * the Naive Bayes method, i.e. the conditional probabilities.
 	 */
-	protected Map<Concept,Map<Attribute, AttributeValue>> p;
+	protected Map<Concept,Map<Attribute, Integer>> p;
 	
 	/**
 	 * These are the attribute indices that we should consider for training
 	 */
-	protected ArrayList<String> attributeList;
+	protected List<String> attributeList;
 	
 	/** An auxiliary variable */
 	protected boolean verbose = false;
@@ -129,7 +130,7 @@ public class NaiveBayes implements Classifier {
 
 	public void trainOnAttribute(String aName) {
 		
-		if (attributeList ==null) {
+		if (attributeList == null) {
 			attributeList = new ArrayList<String>();
 		}
 		
@@ -158,20 +159,20 @@ public class NaiveBayes implements Classifier {
 	
 	protected void calculateConditionalProbabilities() {
 
-		p = new HashMap<Concept, Map<Attribute, AttributeValue>>();
+		p = new HashMap<Concept, Map<Attribute, Integer>>();
 		for (Instance i : tSet.getInstances().values()) {
 			for (Attribute a: i.getAtrributes()) {
 				if (a != null && attributeList.contains(a.getName())) {
 					if ( p.get(i.getConcept())== null ) {
-						p.put(i.getConcept(), new HashMap<Attribute, AttributeValue>());
+						p.put(i.getConcept(), new HashMap<Attribute, Integer>());
 					}
-					Map<Attribute, AttributeValue> aMap = p.get(i.getConcept());
-					AttributeValue aV = aMap.get(a);
-					if ( aV == null ) {
-					  aV = new AttributeValue(a.getValue()); 
-						aMap.put(a, aV);
+					Map<Attribute, Integer> aMap = p.get(i.getConcept());
+					Integer count = aMap.get(a);
+					if ( count == null ) {
+					  count = 1; 
+						aMap.put(a, count);
 					} else {
-						aV.count();
+						count++;
 					}
 				}
 			}
@@ -225,15 +226,15 @@ public class NaiveBayes implements Classifier {
 		double cP=1;
 		for (Attribute a : i.getAtrributes()) {
 			if ( a != null && attributeList.contains(a.getName()) ) {
-				Map<Attribute, AttributeValue> aMap = p.get(c);
-				AttributeValue aV = aMap.get(a); 
-				if ( aV == null) {
+				Map<Attribute, Integer> aMap = p.get(c);
+				Integer count = aMap.get(a); 
+				if ( count == null) {
 				  // the specific attribute value is not present for the current concept.
 					// Can you justify the following estimate?
 					// Can you think of a better choice?
 					cP *= ((double) 1 / (tSet.getSize()+1));
 				} else {
-				  cP *= (aV.getCount()/conceptPriors.get(c));
+				  cP *= (count/conceptPriors.get(c));
 				}
 			}
 		}	

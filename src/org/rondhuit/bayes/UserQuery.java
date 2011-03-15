@@ -6,7 +6,6 @@
  */
 package org.rondhuit.bayes;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -21,7 +20,7 @@ public class UserQuery {
 	private String query;
 	private String[] queryTerms;
 	
-	public UserQuery(String uid, String q) throws IOException {
+	public UserQuery(String uid, String q){
 		setUid(uid);
 		setQuery(q);
 		queryTerms = parseQuery();
@@ -83,7 +82,7 @@ public class UserQuery {
 
   @Override
   public int hashCode() {
-    final int prime = 31;
+    final int prime = 17;
     int result = 1;
     result = prime * result + ((query == null) ? 0 : query.hashCode());
     result = prime * result + Arrays.hashCode(queryTerms);
@@ -97,15 +96,13 @@ public class UserQuery {
       return true;
     if (obj == null)
       return false;
-    if (getClass() != obj.getClass())
+    if (!(obj instanceof UserQuery))
       return false;
     final UserQuery other = (UserQuery) obj;
     if (query == null) {
       if (other.query != null)
           return false;
     } else if (!query.equals(other.query))
-      return false;
-    if (!Arrays.equals(queryTerms, other.queryTerms))
       return false;
     if (uid == null) {
       if (other.uid != null)
