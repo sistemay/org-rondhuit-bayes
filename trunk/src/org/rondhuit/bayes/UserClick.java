@@ -38,8 +38,7 @@ public class UserClick  extends BaseInstance {
     }
 	}
 	
-	@Override
-  public UserClick[] load(BufferedReader bR) throws IOException {
+  public static UserClick[] load(BufferedReader bR) throws IOException {
     ArrayList<UserClick> userClicks = new ArrayList<UserClick>();
     String line;
     boolean hasMoreLines = true;

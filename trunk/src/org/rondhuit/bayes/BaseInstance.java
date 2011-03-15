@@ -48,14 +48,14 @@ public class BaseInstance implements Instance {
 	 * @param fileName the name of the file that contains the user clicks
 	 * @throws IOException 
 	 */
-	public BaseInstance[] load(String fileName) throws IOException {
+	public static BaseInstance[] load(String fileName) throws IOException {
 	  File           file = new File(fileName);
 	  FileReader  fReader = new FileReader(file);
 	  BufferedReader bR = new BufferedReader(fReader); 
 	  return load(bR);
 	}
   
-  public BaseInstance[] load(BufferedReader bR) throws IOException {
+  public static BaseInstance[] load(BufferedReader bR) throws IOException {
     ArrayList<BaseInstance> baseInstances = new ArrayList<BaseInstance>();
     String line;
     boolean hasMoreLines = true;
