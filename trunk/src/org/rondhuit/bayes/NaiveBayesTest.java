@@ -53,7 +53,7 @@ public class NaiveBayesTest {
         System.out.println("\t" + getQuery(qid));
         for(int urlId = 0; urlId < URLS.length; urlId++){
           Concept c = naiveBayes.classify(getUserClick(EMPLOYEES[uid], getQuery(qid), URLS[urlId]));
-          System.out.println("\t\t" + URLS[urlId] + " => " + c);
+          System.out.println("\t\t" + URLS[urlId] + " => " + c.getName());
         }
       }
     }
