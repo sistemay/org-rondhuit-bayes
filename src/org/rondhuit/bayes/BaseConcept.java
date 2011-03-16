@@ -50,12 +50,15 @@ public class BaseConcept implements Concept {
 	
 	@Override
 	public String toString() {
-	    return name;
+	  StringBuilder sb = new StringBuilder();
+	  sb.append("name=").append(name).append(",parent=");
+	  if(parent == null) return sb.append("null").toString();
+	  else return sb.append(parent.toString()).toString();
 	}
 	
 	@Override
 	public int hashCode() {
-	  final int prime = 31;
+	  final int prime = 37;
 	  int result = 1;
 	  result = prime * result + ((name == null) ? 0 : name.hashCode());
 	  result = prime * result + ((parent == null) ? 0 : parent.hashCode());
@@ -64,13 +67,13 @@ public class BaseConcept implements Concept {
 
 	@Override
 	public boolean equals(Object obj) {
-	  final BaseConcept other = (BaseConcept) obj;
 	  if (this == obj) {
 	    return true;
 	  }
 	  if ( !(obj instanceof BaseConcept) ) {
 	    return false;
 	  }
+    final BaseConcept other = (BaseConcept) obj;
 	  if (name == null) {
 	    if (other.name != null) {
 	      return false;

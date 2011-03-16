@@ -100,12 +100,12 @@ public class TrainingSet implements Serializable {
 	public int getNumberOfConcepts() {
 		return conceptSet.size();
 	}
-	
+	/*
 	public void print() {
 		for (Instance i : instanceSet.values()) {
 			i.print();
 		}
-	}
+	}*/
 
 	/**
 	 * @return the conceptSet
