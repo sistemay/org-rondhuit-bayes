@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * @author babis
  *
  */
-public class UserClick  extends BaseInstance {
+public class UserClick extends BaseInstance {
 
 	UserQuery userQuery;
 	String url;
@@ -73,7 +73,7 @@ public class UserClick  extends BaseInstance {
       return true;
     if (obj == null)
       return false;
-    if (getClass() != obj.getClass())
+    if (!(obj instanceof UserClick))
       return false;
     final UserClick other = (UserClick) obj;
     if (url == null) {
